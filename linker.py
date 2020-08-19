@@ -54,8 +54,12 @@ for w in d:
 
 	sh(['cp',w+'.desktop',name+'.desktop'])
 
+	b = open(name + '.sh', 'w')
+	b.write('export DISPLAY=localhost:0.0; ' + comm)
+	b.close()
+
 	b = open(name + '.bat', 'w')
-	b.write('wsl "export DISPLAY=localhost:0.0; ' + comm + '"')
+	b.write('wsl "./'+name+'.sh"')
 	b.close()
 
 	ps.write(f'''
