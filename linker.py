@@ -14,6 +14,10 @@ quiet=0
 if '-q' in argv:
     quiet=1
 
+slow=0
+if '-s' in argv:
+    slow=1
+
 gi.require_version('Gtk', '3.0')
 exec('from gi.repository import Gtk')
 
@@ -48,6 +52,8 @@ from time import time
 t=dict()
 for w in d:
 
+    if slow:
+        sleep(0.01)
 
     if quiet==0:
         pc = int(count / len(d) * wid)

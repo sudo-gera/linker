@@ -1,0 +1,12 @@
+[Unit]
+StartLimitIntervalSec=4
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=32
+User=gera
+ExecStart=python3 PATHlinker.py -q -s
+
+[Install]
+WantedBy=multi-user.target
