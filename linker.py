@@ -41,6 +41,9 @@ for w in d:
 	if comm == None or get('nodisplay',a,'false').lower().strip() == 'true':
 		continue
 
+	while '%' in comm:
+		comm=comm[:comm.index('%')]+comm[comm.index('%')+2:]
+
 	name = get('name', a, w)
 	for e in '\\/:*?"<>|+%!@':
 		name=name.replace(e,'_')
@@ -59,7 +62,7 @@ for w in d:
 	b.close()
 
 	b = open(name + '.bat', 'w')
-	b.write('wsl "./'+name+'.sh"')
+	b.write('wsl "/mnt/c/Users/user/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/wsl/'+name+'.sh"')
 	b.close()
 
 	ps.write(f'''
