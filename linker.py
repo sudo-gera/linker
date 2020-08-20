@@ -53,15 +53,18 @@ count = 0
 lc = 0
 try:
     wid = get_terminal_size()[0]
-except:
-    wid=80
-for w in d:
+except BaseException:
+    wid = 80
 
+if quiet == 0:
+    ps.write('Write-Host -NoNewline "' + wid // 2 * '#' + '"')
+
+for w in d:
     if slow:
         sleep(0.01)
 
     if quiet == 0:
-        pc = int(count / len(d) * wid)
+        pc = int(count / len(d) * wid / 2)
         print(pc * '#', end='\r')
         count += 1
 
@@ -139,9 +142,5 @@ Write-Host -NoNewline "{'#'*(pc-lc)}"
 ''')
         lc = pc
 ps.close()
-if quiet == 0:
-    print(' ' * wid, end='\r')
 sh(['powershell.exe', './linker.ps1'])
-if quiet == 0:
-    print('\r' + ' ' * wid, end='\r')
 open(getenv('HOME') + '/.linker', 'w').write(dumps(db))
