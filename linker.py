@@ -51,8 +51,10 @@ ps = open('linker.ps1', 'w')
 
 count = 0
 lc = 0
-wid = get_terminal_size()[0]
-t = dict()
+try:
+    wid = get_terminal_size()[0]
+except:
+    wid=80
 for w in d:
 
     if slow:
