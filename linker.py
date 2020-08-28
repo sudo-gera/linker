@@ -163,6 +163,7 @@ try:
     sh(['powershell.exe', './linker.ps1'])
 except:
     print('powershell not found, no items will be processed')
+print('\r'+' '*wid,end='\r')
 try:
     open(getenv('HOME') + '/.linker', 'w').write(dumps(db))
 except:
