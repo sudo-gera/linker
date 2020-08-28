@@ -1,9 +1,15 @@
 from time import time
-import gi
+try:
+    import gi
+except:
+    gi=None
 from subprocess import run as sh
 import os
 from traceback import format_exc as error
-from os import get_terminal_size
+try:
+    from os import get_terminal_size
+except:
+    get_terminal_size=None
 from json import loads
 from json import dumps
 from os import getenv
@@ -19,9 +25,11 @@ slow = 0
 if '-s' in argv:
     slow = 1
 
-gi.require_version('Gtk', '3.0')
-exec('from gi.repository import Gtk')
-
+try:
+    gi.require_version('Gtk', '3.0')
+    exec('from gi.repository import Gtk')
+except BaseException:
+    Gtk=None
 
 def get(q, a, z):
     d = [w.split('=')[1] for w in a.split('\n') if '=' in w and w.split(
@@ -31,7 +39,10 @@ def get(q, a, z):
     return d
 
 
-Gtk = Gtk.IconTheme.get_default()
+try:
+    Gtk = Gtk.IconTheme.get_default()
+except:
+    print('error: icons will be disabled')
 
 os.chdir('/mnt/c/Users/user/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/')
 if not os.path.exists('./wsl/'):
@@ -47,7 +58,11 @@ d = os.popen(
     "dpkg --search '*.desktop' | awk '{print $2}' | sort --unique").read().split('\n')
 d = [w.strip()[:-8] for w in d if os.path.exists(w)]
 
-ps = open('linker.ps1', 'w')
+try:
+    ps = open('linker.ps1', 'w')
+except:
+    os.chdir('/mnt/c/Users/user/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/')
+    ps = open('linker.ps1', 'w')
 
 count = 0
 lc = 0
@@ -93,26 +108,28 @@ for w in d:
         new = 1
 
     icon = None
-    for w in [48] + list(range(512)):
-        if icon:
-            break
-        icon = Gtk.lookup_icon(
-            get('icon', a, 'application-x-executable'), w, 0)
-    for w in [48] + list(range(512)):
-        if icon:
-            break
-        icon = Gtk.lookup_icon('application-x-executable', w, 0)
+    try:
+        for w in [48] + list(range(512)):
+            if icon:
+                break
+            icon = Gtk.lookup_icon(
+                get('icon', a, 'application-x-executable'), w, 0)
+        for w in [48] + list(range(512)):
+            if icon:
+                break
+            icon = Gtk.lookup_icon('application-x-executable', w, 0)
 
-    icon = icon.get_filename()
+        icon = icon.get_filename()
 
-    hash = str(sum([w * 2**(e % 60) if e % 2 else -w * 2**(e % 60)
-                    for e, w in enumerate(open(icon, 'rb').read())]))
-    if icon not in db[name] or db[name][icon] != hash:
-        db[name][icon] = hash
-        sh(['convert', icon, name + '.ico'])
-        new = 1
+        hash = str(sum([w * 2**(e % 60) if e % 2 else -w * 2**(e % 60)
+                        for e, w in enumerate(open(icon, 'rb').read())]))
+        if icon not in db[name] or db[name][icon] != hash:
+            db[name][icon] = hash
+            sh(['convert', icon, name + '.ico'])
+            new = 1
+    except:
+        pass
 
-#    sh(['cp', w + '.desktop', name + '.desktop'])
 
     script = 'export DISPLAY=localhost:0.0; ' + comm
     if 'sh' not in db[name] or db[name]['sh'] != script:
@@ -142,5 +159,11 @@ Write-Host -NoNewline "{'#'*(pc-lc)}"
 ''')
         lc = pc
 ps.close()
-sh(['powershell.exe', './linker.ps1'])
-open(getenv('HOME') + '/.linker', 'w').write(dumps(db))
+try:
+    sh(['powershell.exe', './linker.ps1'])
+except:
+    print('powershell not found, no items will be processed')
+try:
+    open(getenv('HOME') + '/.linker', 'w').write(dumps(db))
+except:
+    pass
