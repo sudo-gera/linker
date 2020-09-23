@@ -1,3 +1,6 @@
+""":"
+python3 $0 $@
+":"""
 from time import time
 try:
     import gi
