@@ -1,5 +1,6 @@
 """:"
 python3 $0 $@
+exit
 ":"""
 from time import time
 try:
